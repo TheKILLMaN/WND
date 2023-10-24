@@ -3,12 +3,12 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <!--<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>-->    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/5.2.2/typescript.min.js" integrity="sha512-syMXTm6RBTicRIXdHeFlkAJkZciyzaUxRbkGx5g7lMKB3rkm9g9xwUZP7y8tw8ASmIAE5V6Ol1BUH1vTHrvHAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <title>WND Project | Homepage</title>
+    <script src="https://unpkg.com/vue-cookies@1.5.12/vue-cookies.js"></script>
 
+    <title>WND Project | Cart</title>
     <style>
 
         html {
@@ -84,14 +84,14 @@
 
         .cardCategory {
             width: 90px;
-            text-align:center;
+            text-align: center;
             font-size: 12px;
             letter-spacing: 0.1em;
             color: black;
             background-color: white;
             border-radius: 20px;
             padding: 10px;
-            border:1px solid black;
+            border: 1px solid black;
         }
 
         .cardImage {
@@ -106,6 +106,7 @@
         .cardText {
             padding: 10px;
         }
+
         .productDescription {
             font-size: 16px;
             letter-spacing: 1.42px;
@@ -113,17 +114,17 @@
 
         .productPrice {
             text-transform: none;
-            font-weight:800;
+            font-weight: 800;
         }
 
-        .productButton{
+        .productButton {
             width: 96%;
-            text-align:center;
-            text-decoration:none;
-            color:black;
-            background-color:white;
-            padding:5px;
-            display:block;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            background-color: white;
+            padding: 5px;
+            display: block;
         }
     </style>
 </head>
@@ -144,12 +145,12 @@
         <div class="pageContainer">
 
             <div class="pageTitle">
-                <h1>Bestsellers</h1>
+                <h1>Cart</h1>
             </div>
 
             <div class="productContainer">
-                
-                <template>
+
+                <!--<template>
                     <div class="cardContainer" v-for="product in productsData">
                         <div class="cardImage" v-bind:style='{ backgroundImage: "url(" + product.thumbnail + ")", }'>
                             <div class="cardCategory">{{ product.category }}</div>
@@ -165,7 +166,7 @@
                             <a class="productButton" :href="'details.html?id=' + product.id">Details</a>
                         </div>
                     </div>
-                </template>
+                </template>-->
             </div>
         </div>
 
@@ -176,38 +177,53 @@
 
 <script type="text/javascript">
 
+    var urlParams = new URLSearchParams(window.location.search);
+    var id = urlParams.get('id');
+    console.log(id);
+
+
+    var cart = new Array();
+    var cookie = new Array();
+
     var productsData = []
     var usersData = []
     var product = []
     var user = []
-
-    var App= new Vue({
-        el: '#app',
-        data:{
-            productsData:[],
-            usersData:[]
-        },
-        mounted() {
-            fetch("https://dummyjson.com/products")
-            .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    this.productsData = data.products
-                    })
-                .catch(err => console.log(err.message))
+    var productCart = []
 
 
 
-            fetch("https://dummyjson.com/users")
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data)
-                    this.usersData = data.users[0]
-                })
-                .catch(err => console.log(err.message))            
+
+    function createCookie(name, value, days) {
+        var expires;
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toGMTString();
         }
-        
-    });
+        else {
+            expires = "";
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
 </script>
+
+
 
 </html>

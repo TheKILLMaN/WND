@@ -6,7 +6,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/5.2.2/typescript.min.js" integrity="sha512-syMXTm6RBTicRIXdHeFlkAJkZciyzaUxRbkGx5g7lMKB3rkm9g9xwUZP7y8tw8ASmIAE5V6Ol1BUH1vTHrvHAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+    <script src="https://unpkg.com/vue-cookies@1.5.12/vue-cookies.js"></script>
+
     <title>WND Project | Product details</title>
 
     <style>
@@ -147,7 +148,7 @@
    <header class="headerContainer">
     <div class="headerContent">
         <nav class="navMain">
-            <a href="index.html">Homepage</a> | <a href="shop.html">See all</a>
+            <a href="index.html">Homepage</a> | <a href="shop.html">See all</a> <!--| <a href="cart.html">Cart</a>-->
         </nav>
     </div>
 </header>
@@ -158,7 +159,7 @@
 
     <div class="pageContainer">
 
-        <div class="pageTitle">
+        <div id="a" class="pageTitle">
             <h1>Bestsellers</h1>
         </div>
 
@@ -177,7 +178,7 @@
                         <div v-bind="usersData">
                             <div>{{ usersData.firstName}}</div>
                         </div>
-                        <!--<a class="productButton" :href="'details.html?id=' + productsData.id">Details</a>-->
+                        <div class="productButton" id="addCart" v-on:click='addCart'>Add to cart</div>
                     </div>
                 </div>
                 <div class="gallery">
@@ -199,6 +200,10 @@
     var urlParams = new URLSearchParams(window.location.search);
     var id = urlParams.get('id');
     console.log(id);
+
+
+    var cart=new Array();
+    var cookie=new Array();
 
     var productsData = []
     var usersData = []
@@ -230,8 +235,68 @@
                     this.usersData = data.users[0]
                 })
                 .catch(err => console.log(err.message))            
-        }
+        },
         
     });
+    
+    function addCart(){
+        console.log("AGGIUNTO!");
+        
+        //document.cookie = cart +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+
+        //$cookies.set("prodotto"+id, id)
+
+        if(!getCookie('cart')){
+            createCookie('cart', JSON.stringify(cart));
+        }
+
+        //createCookie('cart', JSON.stringify(cart));
+        cookie=JSON.parse(getCookie('cart'));
+
+        if(cookie.find((element) => element == id)){
+        }else{            
+            cookie.push(id);
+        }
+        
+        //cookie.push(id);
+        createCookie('cart', JSON.stringify(cookie));
+    }
+
+
+
+    //function createCookie(name, value, days) {
+    //    var expires;
+    //    if (days) {
+    //        var date = new Date();
+    //        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    //        expires = "; expires=" + date.toGMTString();
+    //    }
+    //    else {
+    //        expires = "";
+    //    }
+    //    document.cookie = name + "=" + value + expires + "; path=/";
+    //}
+
+        function createCookie(/* { key: "foo", value: "bar" }, { ... } */) {
+            for (var i = 0; i < arguments.length; i++) {
+                document.cookie = arguments[i].key + "=" + arguments[i].value + "; path=/";
+            }
+        }
+
+    function getCookie(c_name) {
+        if (document.cookie.length > 0) {
+            c_start = document.cookie.indexOf(c_name + "=");
+            if (c_start != -1) {
+                c_start = c_start + c_name.length + 1;
+                c_end = document.cookie.indexOf(";", c_start);
+                if (c_end == -1) {
+                    c_end = document.cookie.length;
+                }
+                return unescape(document.cookie.substring(c_start, c_end));
+            }
+        }
+        return "";
+    }
+
 </script>
 </html>
