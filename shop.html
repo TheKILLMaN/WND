@@ -1,0 +1,328 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <!--<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/5.2.2/typescript.min.js" integrity="sha512-syMXTm6RBTicRIXdHeFlkAJkZciyzaUxRbkGx5g7lMKB3rkm9g9xwUZP7y8tw8ASmIAE5V6Ol1BUH1vTHrvHAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>WND Project | Shop</title>
+
+    <style>
+
+        html {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
+        }
+
+        body {
+            margin: 0;
+            background-color: #afc4ce;
+        }
+
+        .headerContainer {
+            width: 100%;
+            height: 150px;
+            background-color: #273b44;
+        }
+
+        .headerContent {
+            margin: auto;
+            width: fit-content;
+        }
+
+        .navMain {
+            font-size: 18px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+        }
+
+            .navMain a {
+                text-decoration: none !important;
+                color: white;
+            }
+
+        .pageContainer {
+            margin: auto;
+            width: 90%;
+        }
+
+        .pageTitle {
+            background-color: #273b44;
+            height: 75px;
+            border-radius: 3px;
+            font-size: 18px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            margin-bottom: 20px
+        }
+
+        .productContainer {
+            display: flex;
+            justify-content: space-between;
+            flex-flow: wrap;
+            gap: 20px 3px;
+        }
+
+        .cardContainer {
+            color: white;
+            width: 24%;
+            height: 550px;
+            background-color: aliceblue;
+            border-radius: 5px;
+            background-color: #273b44;
+            font-size: 18px;
+            color: white;
+            text-transform: uppercase;
+            font-weight: 400;
+            letter-spacing: 0.2em;
+        }
+
+        .cardCategory {
+            width: 90px;
+            text-align: center;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            color: black;
+            background-color: white;
+            border-radius: 20px;
+            padding: 10px;
+            border: 1px solid black;
+        }
+
+        .cardImage {
+            width: 100%;
+            height: 250px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center;
+            background-color: black;
+        }
+
+        .cardText {
+            padding: 10px;
+        }
+
+        .productDescription {
+            font-size: 16px;
+            letter-spacing: 1.42px;
+        }
+
+        .productPrice {
+            text-transform: none;
+            font-weight: 800;
+        }
+
+        .productButton {
+            width: 96%;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            background-color: white;
+            padding: 5px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="headerContainer">
+        <div class="headerContent">
+            <nav class="navMain">
+                <a href="index.html">Homepage</a> | <a href="shop.html">See all</a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="main"></div>
+
+    <div id="app">
+
+
+        <div class="pageContainer">
+
+            <div class="pageTitle" style="margin: 20px 0; display: flex;">
+                <div>
+                    <h1 style="display: table-cell;vertical-align: middle;">Shop</h1>
+                </div>
+
+                <div style="margin-top: 15px;">
+                    <label for="category">Category</label>
+                    <select class="productFilter" id="category" name="category">
+                        <option value=' -1 '>All</option>
+                        <option v-for="cat in category" v-model="selectedCategory" :value=' cat '>{{ cat }}</option>
+                    </select>
+                    <label for="brand">Brand</label>
+                    <select class="productFilter" id="brand" name="brand">
+                        <option value=' -1 '>All</option>
+                        <option v-for="bra in brand" :value=' bra '>{{ bra }}</option>
+                    </select>
+
+                    <label for="priceMin">Min</label>
+                    <select class="productFilter" id="priceMin" name="priceMin">
+                        <option v-for="pri in price" :value=' pri '>{{ pri }}</option>
+                    </select>
+
+                    <label for="priceMax">Max</label>
+                    <select class="productFilter" id="priceMax" name="priceMax">
+                        <option v-for="pri in price" :value=' pri '>{{ pri }}</option>
+                    </select>
+                </div>
+            </div>
+
+                <div class="productContainer">
+
+                    <template>
+                        <div class="cardContainer" v-for="product in productsData" :category="product.category" :brand="product.brand" :price="product.price">
+                            <div class="cardImage" v-bind:style='{ backgroundImage: "url(" + product.thumbnail + ")", }'>
+                                <div class="cardCategory">{{ product.category }}</div>
+                            </div>
+                            <div class="cardText">
+                                <div style="font-weight:800; margin:5px 0">{{ product.brand }}</div>
+                                <div style="margin:5px 0">{{ product.title }}</div>
+                                <div class="productDescription">{{ product.description }}</div>
+                                <div class="productPrice">Fr. {{ product.price }}.-</div>
+                                <div v-bind="usersData">
+                                    <div>{{ usersData.firstName}}</div>
+                                </div>
+                                <a class="productButton" :href="'details.html?id=' + product.id">Details</a>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+    </div>
+
+</body>
+
+
+<script type="text/javascript">
+
+    var productsData = []
+    var usersData = []
+    var product = []
+    var user = []
+    var category=[]
+    var brand=[]
+    var price=[]
+    var key2=0;
+    var key3=0;
+    var key4=0;
+    var selectedCategory='';
+
+    var App= new Vue({
+        el: '#app',
+        data:{
+            search: '',
+            productsData:[],
+            usersData:[]
+        },
+        mounted() {
+            fetch("https://dummyjson.com/products")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.productsData = data.products
+                    product= data.products                    
+                    console.log(product);
+
+                    
+
+                    for (var key in product) {
+                        if (product.hasOwnProperty(key)) {
+                            console.log(product[key].category);
+
+                            if (!category.includes(product[key].category)){
+                                category[key2] = product[key].category;
+                                key2++;
+                            }
+                            if (!brand.includes(product[key].brand)){
+                                brand[key3] = product[key].brand;
+                                key3++;
+                            }
+                            if (!price.includes(product[key].price)){
+                                price[key4] = product[key].price;
+                                key4++;
+                            }
+
+                        }
+                    }
+                    
+                    
+                    price.sort(function(a, b) {
+                      return a - b;
+                    });      
+                    console.log(category);
+                    console.log(brand);
+                    console.log(price);
+                })
+                .catch(err => console.log(err.message))
+                
+            fetch("https://dummyjson.com/users")
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.usersData = data.users[0]
+                })
+                .catch(err => console.log(err.message))
+                
+        }
+    });   
+                    
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#category').change(function(){
+            $('.cardContainer').each(function(){
+                if($(this).attr('category') != $('#category').val() && $('#category').val() != -1) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+
+
+        $('#brand').change(function(){
+            $('.cardContainer').each(function(){
+                if($(this).attr('brand') != $('#brand').val() && $('#brand').val() != -1) {
+                    $(this).hide();
+                } else {
+                $(this).show();
+                }
+            });
+        });
+
+
+        $('#priceMin').change(function(){
+            $('.cardContainer').each(function(){
+                if(parseInt($(this).attr('price')) < parseInt($('#priceMin').val()) && $('#priceMin').val() != -1) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+
+
+        $('#priceMax').change(function(){
+            $('.cardContainer').each(function(){
+                if(parseInt($(this).attr('price')) > parseInt($('#priceMax').val()) && $('#priceMax').val() != -1) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                }
+            });
+        });
+
+
+    });
+</script>
+
+</html>
