@@ -3,6 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/5.2.2/typescript.min.js" integrity="sha512-syMXTm6RBTicRIXdHeFlkAJkZciyzaUxRbkGx5g7lMKB3rkm9g9xwUZP7y8tw8ASmIAE5V6Ol1BUH1vTHrvHAA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -10,56 +11,6 @@
 
     <title>WND Project | Cart</title>
     <style>
-
-        html {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
-        }
-
-        body {
-            margin: 0;
-            background-color: #afc4ce;
-        }
-
-        .headerContainer {
-            width: 100%;
-            height: 150px;
-            background-color: #273b44;
-        }
-
-        .headerContent {
-            margin: auto;
-            width: fit-content;
-        }
-
-        .navMain {
-            font-size: 18px;
-            color: white;
-            text-transform: uppercase;
-            font-weight: 400;
-            letter-spacing: 0.2em;
-        }
-
-            .navMain a {
-                text-decoration: none !important;
-                color: white;
-            }
-
-        .pageContainer {
-            margin: auto;
-            width: 90%;
-        }
-
-        .pageTitle {
-            background-color: #273b44;
-            height: 75px;
-            border-radius: 3px;
-            font-size: 18px;
-            color: white;
-            text-transform: uppercase;
-            font-weight: 400;
-            letter-spacing: 0.2em;
-            margin-bottom: 20px
-        }
 
         .productContainer {
             display: flex;
@@ -133,7 +84,7 @@
     <header class="headerContainer">
         <div class="headerContent">
             <nav class="navMain">
-                <a href="index.html">Homepage</a> | <a href="shop.html">See all</a> <!--| <a href="cart.html">Cart</a>-->
+                <a href="index.html">Homepage</a> | <a href="shop.html">See all</a> | <a href="cart.html">Cart</a>
             </nav>
         </div>
     </header>
@@ -150,23 +101,9 @@
 
             <div class="productContainer">
 
-                <!--<template>
-                    <div class="cardContainer" v-for="product in productsData">
-                        <div class="cardImage" v-bind:style='{ backgroundImage: "url(" + product.thumbnail + ")", }'>
-                            <div class="cardCategory">{{ product.category }}</div>
-                        </div>
-                        <div class="cardText">
-                            <div style="font-weight:800; margin:5px 0">{{ product.brand }}</div>
-                            <div style="margin:5px 0">{{ product.title }}</div>
-                            <div class="productDescription">{{ product.description }}</div>
-                            <div class="productPrice">Fr. {{ product.price }}.-</div>
-                            <div v-bind="usersData">
-                                <div>{{ usersData.firstName}}</div>
-                            </div>
-                            <a class="productButton" :href="'details.html?id=' + product.id">Details</a>
-                        </div>
-                    </div>
-                </template>-->
+                <div id="cartList">
+
+                </div>
             </div>
         </div>
 
@@ -191,7 +128,16 @@
     var user = []
     var productCart = []
 
+    $(document).ready(function() {
+         cart=JSON.parse(getCookie('cart'));
+         console.log(cart);
 
+
+         for (let i = 0; i < cart.length; ++i) {
+                $("#cartList").append(cart[i]+"<br/>");
+           }
+
+    });
 
 
     function createCookie(name, value, days) {
